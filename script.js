@@ -26,6 +26,19 @@ clickButton.addEventListener("click", () => {
   checkAchievements();
 });
 
+function upgrade(costElement, valueElement, upgradeElement, currentValue, costMultiplier) {
+  const cost = parseInt(costElement.dataset.cost);
+  if (score >= cost) {
+    score -= cost;
+    currentValue++;
+    scoreElement.innerText = `Score: ${score}`;
+    valueElement.innerText = currentValue;
+    costElement.dataset.cost = Math.floor(cost * costMultiplier);
+    costElement.innerText = `Upgrade (Cost: ${costElement.dataset.cost})`;
+  }
+  return currentValue;
+}
+
 upgradeClickPowerButton.addEventListener("click", () => {
   const cost = parseInt(upgradeClickPowerButton.dataset.cost);
   if (score >= cost) {
@@ -38,28 +51,16 @@ upgradeClickPowerButton.addEventListener("click", () => {
   }
 });
 
+upgradeClickPowerButton.addEventListener("click", () => {
+  clickPower = upgrade(upgradeClickPowerButton, clickPowerElement, upgradeClickPowerButton, clickPower, 1.5);
+});
+
 upgradeClickMultiplierButton.addEventListener("click", () => {
-  const cost = parseInt(upgradeClickMultiplierButton.dataset.cost);
-  if (score >= cost) {
-    score -= cost;
-    clickMultiplier++;
-    scoreElement.innerText = `Score: ${score}`;
-    clickMultiplierElement.innerText = clickMultiplier;
-    upgradeClickMultiplierButton.dataset.cost = Math.floor(cost * 1.5);
-    upgradeClickMultiplierButton.innerText = `Upgrade (Cost: ${upgradeClickMultiplierButton.dataset.cost})`;
-  }
+  clickMultiplier = upgrade(upgradeClickMultiplierButton, clickMultiplierElement, upgradeClickMultiplierButton, clickMultiplier, 1.5);
 });
 
 upgradeAutoClickerButton.addEventListener("click", () => {
-  const cost = parseInt(upgradeAutoClickerButton.dataset.cost);
-  if (score >= cost) {
-    score -= cost;
-    autoClicker++;
-    scoreElement.innerText = `Score: ${score}`;
-    autoClickerElement.innerText = autoClicker;
-    upgradeAutoClickerButton.dataset.cost = Math.floor(cost * 1.5);
-    upgradeAutoClickerButton.innerText = `Upgrade (Cost: ${upgradeAutoClickerButton.dataset.cost})`;
-  }
+  autoClicker = upgrade(upgradeAutoClickerButton, autoClickerElement, upgradeAutoClickerButton, autoClicker, 1.5);
 });
 
 function checkAchievements() {
