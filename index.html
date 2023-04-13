@@ -54,6 +54,18 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const buttons = document.querySelectorAll("button");
+        
+          buttons.forEach((button) => {
+            button.addEventListener("touchend", (event) => {
+              event.preventDefault();
+              button.blur();
+            });
+          });
+        });
+        </script>
 </body>
 
 </html>
