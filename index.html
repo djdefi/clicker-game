@@ -54,6 +54,13 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script>
+        window.addEventListener("beforeunload", (event) => {
+          // Cancel the event and show the confirmation dialog
+          event.preventDefault();
+          event.returnValue = "";
+        });
+        </script>
 </body>
 
 </html>
