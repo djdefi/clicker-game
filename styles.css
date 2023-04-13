@@ -24,6 +24,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  min-height: 100%; /* Add min-height property */
   margin: 0;
   background-color: #f0f0f0;
   transition: background-color 0.3s ease;
@@ -64,6 +65,10 @@ hr {
 
 /* Mobile-friendly styles */
 @media (max-width: 600px) {
+  body {
+    align-items: flex-start; /* Update align-items property */
+  }
+
   #game-container {
     padding: 1rem;
   }
