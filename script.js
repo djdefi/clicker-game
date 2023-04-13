@@ -71,7 +71,7 @@ function checkAchievements() {
 }
 
 function autoClick() {
-  score += autoClicker * clickMultiplier;
+  score += autoClicker * clickPower * clickMultiplier;
   scoreElement.innerText = `Score: ${score}`;
   checkAchievements();
 }
