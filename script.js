@@ -18,6 +18,13 @@ const achievements = [
   { clicks: 1000, element: document.getElementById("achievement-1000-status") },
   { clicks: 10000, element: document.getElementById("achievement-10000-status") },
   { clicks: 100000, element: document.getElementById("achievement-100000-status") },
+  { clicks: 1000000, element: document.getElementById("achievement-1000000-status") },
+  { clicks: 10000000, element: document.getElementById("achievement-10000000-status") },
+  { clicks: 100000000, element: document.getElementById("achievement-100000000-status") },
+  { clicks: 1000000000, element: document.getElementById("achievement-1000000000-status") },
+  { clicks: 10000000000, element: document.getElementById("achievement-10000000000-status") },
+  { clicks: 100000000000, element: document.getElementById("achievement-100000000000-status") },
+  { clicks: 1000000000000, element: document.getElementById("achievement-1000000000000-status") },
 ];
 
 clickButton.addEventListener("click", () => {
