@@ -136,3 +136,71 @@ function createClickRateChart() {
   
   // Call updateClickRateData() every second
   setInterval(updateClickRateData, 1000);
+
+  // Add two functions: generateSaveCode and loadFromSaveCode
+
+function generateSaveCode() {
+  const gameData = {
+    score: score,
+    clickPower: clickPower,
+    clickMultiplier: clickMultiplier,
+    autoClicker: autoClicker,
+    upgradeClickPowerCost: parseInt(upgradeClickPowerButton.dataset.cost),
+    upgradeClickMultiplierCost: parseInt(upgradeClickMultiplierButton.dataset.cost),
+    upgradeAutoClickerCost: parseInt(upgradeAutoClickerButton.dataset.cost),
+  };
+
+  const jsonString = JSON.stringify(gameData);
+  const saveCode = btoa(jsonString);
+
+  const saveCodeDisplay = document.getElementById("saveCodeDisplay");
+  saveCodeDisplay.value = saveCode;
+}
+  
+function loadFromSaveCode() {
+    const saveCodeDisplay = document.getElementById("saveCodeDisplay");
+    const saveCode = saveCodeDisplay.value.trim();
+  
+    if (!saveCode) {
+      alert("Please enter a save code.");
+      return;
+    }
+  
+    try {
+      const jsonString = atob(saveCode);
+      const gameData = JSON.parse(jsonString);
+  
+      score = gameData.score;
+      clickPower = gameData.clickPower;
+      clickMultiplier = gameData.clickMultiplier;
+      autoClicker = gameData.autoClicker;
+      upgradeClickPowerButton.dataset.cost = gameData.upgradeClickPowerCost;
+      upgradeClickMultiplierButton.dataset.cost = gameData.upgradeClickMultiplierCost;
+      upgradeAutoClickerButton.dataset.cost = gameData.upgradeAutoClickerCost;
+  
+      updateGameUI();
+    } catch (error) {
+      alert("Invalid save code.");
+    }
+  }
+  
+  
+  function copySaveCodeToClipboard() {
+    const saveCodeDisplay = document.getElementById("saveCodeDisplay");
+    saveCodeDisplay.select();
+    saveCodeDisplay.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand("copy");
+  
+    alert("Save code copied to clipboard.");
+  }
+
+  function updateGameUI() {
+    scoreElement.innerText = `Score: ${score}`;
+    clickPowerElement.innerText = clickPower;
+    clickMultiplierElement.innerText = clickMultiplier;
+    autoClickerElement.innerText = autoClicker;
+    upgradeClickPowerButton.innerText = `Upgrade (Cost: ${upgradeClickPowerButton.dataset.cost})`;
+    upgradeClickMultiplierButton.innerText = `Upgrade (Cost: ${upgradeClickMultiplierButton.dataset.cost})`;
+    upgradeAutoClickerButton.innerText = `Upgrade (Cost: ${upgradeAutoClickerButton.dataset.cost})`;
+    checkAchievements();
+  }
