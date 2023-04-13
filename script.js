@@ -3,9 +3,14 @@ let clickPower = 1;
 let clickMultiplier = 1;
 let autoClicker = 0;
 let clickRateData = [];
-let clickRateTimestamps = [];
 let prestigeLevel = 0;
 let prestigeMultiplier = 1;
+let userClicks = 0;
+let userClickRateData = [];
+let autoClickRateData = [];
+let combinedClickRateData = [];
+let clickRateTimestamps = [];
+
 
 const scoreElement = document.getElementById("score");
 const clickButton = document.getElementById("click-button");
@@ -32,15 +37,18 @@ const achievements = [
 ];
 
 clickButton.addEventListener("click", () => {
-  score += clickPower * clickMultiplier * prestigeMultiplier;
-  scoreElement.innerText = `Score: ${score}`;
-  checkAchievements();
-});
+    score += clickPower * clickMultiplier * prestigeMultiplier;
+    scoreElement.innerText = `Score: ${score}`;
+    userClicks++; // Add this line to increment userClicks by 1
+    checkAchievements();
+  });
+  
+  
 
 document.getElementById("prestige-button").addEventListener("click", prestige);
 
 function upgrade(costElement, valueElement, upgradeElement, currentValue, costMultiplier) {
-  const cost = parseInt(costElement.dataset.cost);
+  const cost = +costElement.dataset.cost; // Use unary plus operator to convert string to number
   if (score >= cost) {
     score -= cost;
     currentValue++;
@@ -81,7 +89,7 @@ upgradeAutoClickerButton.addEventListener("click", () => {
   setInterval(autoClick, 1000);
 
   // Add this function to create the chart
-function createClickRateChart() {
+  function createClickRateChart() {
     const ctx = document.getElementById("click-rate-chart").getContext("2d");
     return new Chart(ctx, {
       type: "line",
@@ -89,10 +97,24 @@ function createClickRateChart() {
         labels: clickRateTimestamps,
         datasets: [
           {
-            label: "Click Rate",
-            data: clickRateData,
+            label: "User Click Rate",
+            data: userClickRateData,
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "Auto Click Rate",
+            data: autoClickRateData,
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "Combined Click Rate",
+            data: combinedClickRateData,
+            backgroundColor: "rgba(153, 102, 255, 0.2)",
+            borderColor: "rgba(153, 102, 255, 1)",
             borderWidth: 1,
           },
         ],
@@ -107,22 +129,30 @@ function createClickRateChart() {
     });
   }
   
+  
   // Call createClickRateChart() to initialize the chart
   const clickRateChart = createClickRateChart();
   
   // Add this function to update the click rate data
   function updateClickRateData() {
     const currentTime = new Date().toLocaleTimeString();
-    const currentClickRate = clickPower * clickMultiplier + autoClicker * clickMultiplier;
+    const currentUserClickRate = clickPower * clickMultiplier * userClicks;
+    const currentAutoClickRate = autoClicker * clickMultiplier * clickPower;
+    const currentCombinedClickRate = currentUserClickRate + currentAutoClickRate;
   
-    clickRateData.push(currentClickRate);
+    userClickRateData.push(currentUserClickRate);
+    autoClickRateData.push(currentAutoClickRate);
+    combinedClickRateData.push(currentCombinedClickRate);
     clickRateTimestamps.push(currentTime);
   
-    if (clickRateData.length > 1000) {
-      clickRateData.shift();
+    if (userClickRateData.length > 1000) {
+      userClickRateData.shift();
+      autoClickRateData.shift();
+      combinedClickRateData.shift();
       clickRateTimestamps.shift();
     }
   
+    userClicks = 0; // Move this line to the end of the function
     clickRateChart.update();
   }
   
