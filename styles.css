@@ -2,7 +2,7 @@ body {
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Change from center to flex-start */
   height: 100vh;
   min-height: 100%;
   margin: 0;
