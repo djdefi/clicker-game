@@ -4,6 +4,8 @@ let clickMultiplier = 1;
 let autoClicker = 0;
 let clickRateData = [];
 let clickRateTimestamps = [];
+let prestigeLevel = 0;
+let prestigeMultiplier = 1;
 
 const scoreElement = document.getElementById("score");
 const clickButton = document.getElementById("click-button");
@@ -30,10 +32,12 @@ const achievements = [
 ];
 
 clickButton.addEventListener("click", () => {
-  score += clickPower * clickMultiplier;
+  score += clickPower * clickMultiplier * prestigeMultiplier;
   scoreElement.innerText = `Score: ${score}`;
   checkAchievements();
 });
+
+document.getElementById("prestige-button").addEventListener("click", prestige);
 
 function upgrade(costElement, valueElement, upgradeElement, currentValue, costMultiplier) {
   const cost = parseInt(costElement.dataset.cost);
@@ -49,18 +53,6 @@ function upgrade(costElement, valueElement, upgradeElement, currentValue, costMu
 }
 
 upgradeClickPowerButton.addEventListener("click", () => {
-  const cost = parseInt(upgradeClickPowerButton.dataset.cost);
-  if (score >= cost) {
-    score -= cost;
-    clickPower++;
-    scoreElement.innerText = `Score: ${score}`;
-    clickPowerElement.innerText = clickPower;
-    upgradeClickPowerButton.dataset.cost = Math.floor(cost * 1.5);
-    upgradeClickPowerButton.innerText = `Upgrade (Cost: ${upgradeClickPowerButton.dataset.cost})`;
-  }
-});
-
-upgradeClickPowerButton.addEventListener("click", () => {
   clickPower = upgrade(upgradeClickPowerButton, clickPowerElement, upgradeClickPowerButton, clickPower, 1.5);
 });
 
@@ -69,26 +61,26 @@ upgradeClickMultiplierButton.addEventListener("click", () => {
 });
 
 upgradeAutoClickerButton.addEventListener("click", () => {
-  autoClicker = upgrade(upgradeAutoClickerButton, autoClickerElement, upgradeAutoClickerButton, autoClicker, 1.5);
-});
-
-function checkAchievements() {
-  achievements.forEach((achievement) => {
-    if (score >= achievement.clicks) {
-      achievement.element.innerText = "Complete";
-    }
+    autoClicker = upgrade(upgradeAutoClickerButton, autoClickerElement, upgradeAutoClickerButton, autoClicker, 1.5);
   });
-}
+  
+  function checkAchievements() {
+    achievements.forEach((achievement) => {
+      if (score >= achievement.clicks) {
+        achievement.element.innerText = "Complete";
+      }
+    });
+  }
+  
+  function autoClick() {
+    score += autoClicker * clickPower * clickMultiplier * prestigeMultiplier;
+    scoreElement.innerText = `Score: ${score}`;
+    checkAchievements();
+  }
+  
+  setInterval(autoClick, 1000);
 
-function autoClick() {
-  score += autoClicker * clickPower * clickMultiplier;
-  scoreElement.innerText = `Score: ${score}`;
-  checkAchievements();
-}
-
-setInterval(autoClick, 1000);
-
-// Add this function to create the chart
+  // Add this function to create the chart
 function createClickRateChart() {
     const ctx = document.getElementById("click-rate-chart").getContext("2d");
     return new Chart(ctx, {
@@ -140,19 +132,19 @@ function createClickRateChart() {
   // Add two functions: generateSaveCode and loadFromSaveCode
 
 function generateSaveCode() {
-  const gameData = {
-    score: score,
-    clickPower: clickPower,
-    clickMultiplier: clickMultiplier,
-    autoClicker: autoClicker,
-    upgradeClickPowerCost: parseInt(upgradeClickPowerButton.dataset.cost),
-    upgradeClickMultiplierCost: parseInt(upgradeClickMultiplierButton.dataset.cost),
-    upgradeAutoClickerCost: parseInt(upgradeAutoClickerButton.dataset.cost),
-  };
+  const gameData = [
+    score,
+    clickPower,
+    clickMultiplier,
+    autoClicker,
+    parseInt(upgradeClickPowerButton.dataset.cost),
+    parseInt(upgradeClickMultiplierButton.dataset.cost),
+    parseInt(upgradeAutoClickerButton.dataset.cost),
+    prestigeLevel,
+    prestigeMultiplier,
+  ];
 
-  const jsonString = JSON.stringify(gameData);
-  const saveCode = btoa(jsonString);
-
+  const saveCode = btoa(gameData.join("|"));
   const saveCodeDisplay = document.getElementById("saveCodeDisplay");
   saveCodeDisplay.value = saveCode;
 }
@@ -167,23 +159,23 @@ function loadFromSaveCode() {
     }
   
     try {
-      const jsonString = atob(saveCode);
-      const gameData = JSON.parse(jsonString);
+      const gameData = atob(saveCode).split("|").map(Number);
   
-      score = gameData.score;
-      clickPower = gameData.clickPower;
-      clickMultiplier = gameData.clickMultiplier;
-      autoClicker = gameData.autoClicker;
-      upgradeClickPowerButton.dataset.cost = gameData.upgradeClickPowerCost;
-      upgradeClickMultiplierButton.dataset.cost = gameData.upgradeClickMultiplierCost;
-      upgradeAutoClickerButton.dataset.cost = gameData.upgradeAutoClickerCost;
+      score = gameData[0];
+      clickPower = gameData[1];
+      clickMultiplier = gameData[2];
+      autoClicker = gameData[3];
+      upgradeClickPowerButton.dataset.cost = gameData[4];
+      upgradeClickMultiplierButton.dataset.cost = gameData[5];
+      upgradeAutoClickerButton.dataset.cost = gameData[6];
+      prestigeLevel = gameData[7];
+      prestigeMultiplier = gameData[8];
   
       updateGameUI();
     } catch (error) {
       alert("Invalid save code.");
     }
   }
-  
   
   function copySaveCodeToClipboard() {
     const saveCodeDisplay = document.getElementById("saveCodeDisplay");
@@ -202,5 +194,32 @@ function loadFromSaveCode() {
     upgradeClickPowerButton.innerText = `Upgrade (Cost: ${upgradeClickPowerButton.dataset.cost})`;
     upgradeClickMultiplierButton.innerText = `Upgrade (Cost: ${upgradeClickMultiplierButton.dataset.cost})`;
     upgradeAutoClickerButton.innerText = `Upgrade (Cost: ${upgradeAutoClickerButton.dataset.cost})`;
+    document.getElementById("prestige-level").innerText = `Prestige Level: ${prestigeLevel}`; // Add this line to update the prestige level
     checkAchievements();
+  }
+
+  function prestige() {
+    const requiredScore = 1000 * Math.pow(2, prestigeLevel); // Adjust the required score as needed
+  
+    if (score < requiredScore) {
+      alert(`You need at least ${requiredScore} points to prestige.`);
+      return;
+    }
+  
+    // Calculate the prestige reward (e.g., a 10% bonus per prestige level)
+    prestigeLevel++;
+    prestigeMultiplier = 1 + prestigeLevel * 1;
+  
+    // Reset the game state
+    score = 0;
+    clickPower = 1;
+    clickMultiplier = 1;
+    autoClicker = 0;
+    upgradeClickPowerButton.dataset.cost = 10;
+    upgradeClickMultiplierButton.dataset.cost = 20;
+    upgradeAutoClickerButton.dataset.cost = 50;
+  
+    // Update the UI
+    updateGameUI();
+    document.getElementById("prestige-level").innerText = `Prestige Level: ${prestigeLevel}`;
   }
