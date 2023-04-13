@@ -25,6 +25,7 @@ const achievements = [
   { clicks: 10000000000, element: document.getElementById("achievement-10000000000-status") },
   { clicks: 100000000000, element: document.getElementById("achievement-100000000000-status") },
   { clicks: 1000000000000, element: document.getElementById("achievement-1000000000000-status") },
+  { clicks: 10000000000000, element: document.getElementById("achievement-10000000000000-status") },
 ];
 
 clickButton.addEventListener("click", () => {
