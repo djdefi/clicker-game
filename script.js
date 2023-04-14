@@ -227,7 +227,7 @@ function updateGameUI() {
 
   // Update the prestige-level element to include the cost
   const prestigeCost = 1000 * Math.pow(2, prestigeLevel);
-  document.getElementById("prestige-level").innerText = `Prestige Level: ${prestigeLevel} (Cost: ${prestigeCost})`;
+  document.getElementById("prestige-button").innerText = `Prestige Level: ${prestigeLevel} (Cost: ${prestigeCost})`;
 
   checkAchievements();
 }
