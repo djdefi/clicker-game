@@ -216,17 +216,21 @@ function loadFromSaveCode() {
     alert("Save code copied to clipboard.");
   }
 
-  function updateGameUI() {
-    scoreElement.innerText = `Score: ${score}`;
-    clickPowerElement.innerText = clickPower;
-    clickMultiplierElement.innerText = clickMultiplier;
-    autoClickerElement.innerText = autoClicker;
-    upgradeClickPowerButton.innerText = `Upgrade (Cost: ${upgradeClickPowerButton.dataset.cost})`;
-    upgradeClickMultiplierButton.innerText = `Upgrade (Cost: ${upgradeClickMultiplierButton.dataset.cost})`;
-    upgradeAutoClickerButton.innerText = `Upgrade (Cost: ${upgradeAutoClickerButton.dataset.cost})`;
-    document.getElementById("prestige-level").innerText = `Prestige Level: ${prestigeLevel}`; // Add this line to update the prestige level
-    checkAchievements();
-  }
+function updateGameUI() {
+  scoreElement.innerText = `Score: ${score}`;
+  clickPowerElement.innerText = clickPower;
+  clickMultiplierElement.innerText = clickMultiplier;
+  autoClickerElement.innerText = autoClicker;
+  upgradeClickPowerButton.innerText = `Upgrade (Cost: ${upgradeClickPowerButton.dataset.cost})`;
+  upgradeClickMultiplierButton.innerText = `Upgrade (Cost: ${upgradeClickMultiplierButton.dataset.cost})`;
+  upgradeAutoClickerButton.innerText = `Upgrade (Cost: ${upgradeAutoClickerButton.dataset.cost})`;
+
+  // Update the prestige-level element to include the cost
+  const prestigeCost = 1000 * Math.pow(2, prestigeLevel);
+  document.getElementById("prestige-level").innerText = `Prestige Level: ${prestigeLevel} (Cost: ${prestigeCost})`;
+
+  checkAchievements();
+}
 
   function prestige() {
     const requiredScore = 1000 * Math.pow(2, prestigeLevel); // Adjust the required score as needed
