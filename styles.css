@@ -72,18 +72,12 @@ hr {
 
   #game-container {
     background-color: #1e1e1e;
-  }
-
-  /* Update the text color for headings, paragraphs, and buttons */
-  #game-container h1,
-  #game-container h2,
-  #game-container p,
-  button {
-    color: #f0f0f0;
+    color: #f0f0f0; /* Update the text color for headings and paragraphs */
   }
 
   button {
     background-color: #5c5c5c;
+    color: #f0f0f0; /* Update the text color for buttons */
   }
 
   button:hover {

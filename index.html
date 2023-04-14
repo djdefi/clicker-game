@@ -13,25 +13,28 @@
     <div id="game-container">
         <h1>Clicker Game</h1>
         <p id="score">Score: 0</p>
-        <button id="click-button">Click me!</button>
+        <button id="click-button" type="button" aria-label="Click me">Click me!</button>
         <hr>
         <h2>Upgrades</h2>
         <div id="upgrades">
             <div class="upgrade">
                 <p>Click Power: <span id="click-power">1</span></p>
-                <button id="upgrade-click-power" data-cost="10">Upgrade (Cost: 10)</button>
+                <button id="upgrade-click-power" type="button" data-cost="10" aria-label="Upgrade click power">Upgrade
+                    (Cost: 10)</button>
             </div>
             <div class="upgrade">
                 <p>Click Multiplier: <span id="click-multiplier">1</span></p>
-                <button id="upgrade-click-multiplier" data-cost="50">Upgrade (Cost: 50)</button>
+                <button id="upgrade-click-multiplier" type="button" data-cost="50"
+                    aria-label="Upgrade click multiplier">Upgrade (Cost: 50)</button>
             </div>
             <div class="upgrade">
                 <p>Auto Clicker: <span id="auto-clicker">0</span> (Clicks per second)</p>
-                <button id="upgrade-auto-clicker" data-cost="100">Upgrade (Cost: 100)</button>
+                <button id="upgrade-auto-clicker" type="button" data-cost="100"
+                    aria-label="Upgrade auto clicker">Upgrade (Cost: 100)</button>
             </div>
             <div>
                 <p id="prestige-level">Prestige Level: 0</p>
-                <button id="prestige-button">Prestige</button>
+                <button id="prestige-button" type="button" aria-label="Prestige">Prestige</button>
             </div>
         </div>
         <hr>
@@ -57,19 +60,19 @@
             <canvas id="click-rate-chart"></canvas>
         </div>
         <h2>Save and Load</h2>
-        <input type="text" id="saveCodeDisplay"/>
-        <button onclick="generateSaveCode()">Generate Save Code</button>
-        <button onclick="copySaveCodeToClipboard()">Copy Save Code</button>
-        <button onclick="loadFromSaveCode()">Load From Save Code</button>
+        <input type="text" id="saveCodeDisplay" />
+        <button onclick="generateSaveCode()" type="button" aria-label="Generate save code">Generate Save Code</button>
+        <button onclick="copySaveCodeToClipboard()" type="button" aria-label="Copy save code">Copy Save Code</button>
+        <button onclick="loadFromSaveCode()" type="button" aria-label="Load from save code">Load From Save Code</button>
     </div>
     <script src="script.js"></script>
     <script>
         window.addEventListener("beforeunload", (event) => {
-          // Cancel the event and show the confirmation dialog
-          event.preventDefault();
-          event.returnValue = "";
+            // Cancel the event and show the confirmation dialog
+            event.preventDefault();
+            event.returnValue = "";
         });
-        </script>
+    </script>
 </body>
 
 </html>
